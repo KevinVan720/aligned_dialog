@@ -3,14 +3,16 @@ import 'package:flutter/material.dart';
 Future<T?> showAlignedDialog<T>({
   required BuildContext context,
   required WidgetBuilder builder,
-  Alignment followerAnchor = Alignment.center,
-  Alignment targetAnchor = Alignment.center,
-  bool isGlobal = false,
   bool barrierDismissible = true,
-  Color? barrierColor = Colors.black12,
+  Color? barrierColor = Colors.black54,
   String? barrierLabel,
   bool useRootNavigator = true,
   RouteSettings? routeSettings,
+  Alignment followerAnchor = Alignment.center,
+  Alignment targetAnchor = Alignment.center,
+  Offset offset = Offset.zero,
+  bool avoidOverflow = false,
+  bool isGlobal = false,
   RouteTransitionsBuilder? transitionsBuilder,
   Duration? duration,
 }) {
@@ -52,6 +54,8 @@ Future<T?> showAlignedDialog<T>({
     themes: themes,
     transitionsBuilder: transitionsBuilder,
     duration: duration,
+    avoidOverflow: avoidOverflow,
+    offset: offset,
   ));
 }
 
@@ -72,6 +76,8 @@ class AlignedDialogRoute<T> extends RawDialogRoute<T> {
     RouteSettings? settings,
     RouteTransitionsBuilder? transitionsBuilder,
     Duration? duration,
+    bool avoidOverflow = false,
+    Offset offset = Offset.zero,
   })  : assert(barrierDismissible != null),
         super(
           pageBuilder: (BuildContext buildContext, Animation<double> animation,
@@ -87,6 +93,8 @@ class AlignedDialogRoute<T> extends RawDialogRoute<T> {
                     Directionality.of(context),
                     mediaQuery.padding.top,
                     mediaQuery.padding.bottom,
+                    offset,
+                    avoidOverflow,
                   ),
                   child: pageChild,
                 );
@@ -117,6 +125,8 @@ class _FollowerDialogRouteLayout extends SingleChildLayoutDelegate {
     this.textDirection,
     this.topPadding,
     this.bottomPadding,
+    this.offset,
+    this.avoidOverflow,
   );
 
   final Alignment followerAnchor;
@@ -132,6 +142,9 @@ class _FollowerDialogRouteLayout extends SingleChildLayoutDelegate {
 
   // Bottom padding of unsafe area.
   final double bottomPadding;
+
+  final Offset offset;
+  final bool avoidOverflow;
 
   // We put the child wherever position specifies, so long as it will fit within
   // the specified parent size padded (inset) by 8. If necessary, we adjust the
@@ -149,6 +162,15 @@ class _FollowerDialogRouteLayout extends SingleChildLayoutDelegate {
   Offset getPositionForChild(Size size, Size childSize) {
     Offset rst = followerAnchor.alongSize(childSize);
     rst = position - rst;
+    rst += offset;
+    if (avoidOverflow) {
+      if (rst.dx < 0) rst = Offset(0, rst.dy);
+      if (rst.dy < 0) rst = Offset(rst.dx, 0);
+      if (rst.dx + childSize.width > size.width)
+        rst = Offset(size.width - childSize.width, rst.dy);
+      if (rst.dy + childSize.height > size.height)
+        rst = Offset(rst.dx, size.height - childSize.height);
+    }
     return rst;
   }
 
@@ -160,6 +182,8 @@ class _FollowerDialogRouteLayout extends SingleChildLayoutDelegate {
 
     return followerAnchor != oldDelegate.followerAnchor ||
         position != oldDelegate.position ||
+        offset != oldDelegate.offset ||
+        avoidOverflow != oldDelegate.avoidOverflow ||
         textDirection != oldDelegate.textDirection ||
         topPadding != oldDelegate.topPadding ||
         bottomPadding != oldDelegate.bottomPadding;
