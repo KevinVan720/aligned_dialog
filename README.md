@@ -36,3 +36,7 @@ The last seven parameters are whats different from the built-in showDialog funct
 **transitionsBuilder**, tells how the dialog shows up and dismisses. The default behavior is a fade transtion, but you can add more animations like sliding easily. **duration** specifies how long this transtion takes.
 
 You can find examples in the example folder.
+
+![example1](https://i.imgur.com/y7OFoJ8.gif)
+
+![example2](https://i.imgur.com/wbBSpwy.gif)

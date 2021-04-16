@@ -2,6 +2,8 @@ import 'dart:math';
 
 import 'package:aligned_dialog/aligned_dialog.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -40,12 +42,31 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Center(
         child: Container(
-          width: 600,
-          child: ListView(
-            children: <Widget>[
-              Builder(builder: (context) {
-                return ElevatedButton(
-                    onPressed: () {
+          width: MediaQuery.of(context).size.width * 0.8,
+          child: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                SizedBox(
+                  height: 20,
+                ),
+                Builder(builder: (context) {
+                  return ElevatedButton(
+                      onPressed: () {
+                        showAlignedDialog(
+                            context: context,
+                            builder: _localDialogBuilder,
+                            followerAnchor: Alignment.topLeft,
+                            targetAnchor: Alignment.bottomLeft,
+                            barrierColor: Colors.transparent);
+                      },
+                      child: Text("Tap to show a local dialog"));
+                }),
+                SizedBox(
+                  height: 20,
+                ),
+                Builder(builder: (context) {
+                  return MouseRegion(
+                    onEnter: (PointerEnterEvent event) {
                       showAlignedDialog(
                           context: context,
                           builder: _localDialogBuilder,
@@ -53,136 +74,297 @@ class _MyHomePageState extends State<MyHomePage> {
                           targetAnchor: Alignment.bottomLeft,
                           barrierColor: Colors.transparent);
                     },
-                    child: Text("Tap to show a local dialog"));
-              }),
-              Builder(builder: (context) {
-                return ElevatedButton(
-                    onPressed: () {
+                    child: Container(
+                        width: 200,
+                        height: 60,
+                        color: Colors.orange,
+                        child: Text("Hover to show a local dialog")),
+                  );
+                }),
+                SizedBox(
+                  height: 20,
+                ),
+                Builder(builder: (context) {
+                  return GestureDetector(
+                    onTap: () {
                       showAlignedDialog(
                           context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              insetPadding: EdgeInsets.zero,
-                              title: Text("Alert!"),
-                              content: Text("Its an alert"),
+                          builder: (BuildContext context) {
+                            return Container(
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: Colors.black87, width: 5)),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Container(
+                                    width: 600,
+                                    height: 360,
+                                    decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                            fit: BoxFit.cover,
+                                            image: NetworkImage(
+                                                "https://images.unsplash.com/photo-1612392062422-ef19b42f74df?ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2550&q=80"))),
+                                  ),
+                                  Container(
+                                    width: 600,
+                                    padding: EdgeInsets.symmetric(vertical: 10),
+                                    child: Text("Enlarged Image"),
+                                    color: Colors.amberAccent,
+                                    alignment: Alignment.center,
+                                  )
+                                ],
+                              ),
                             );
                           },
-                          isGlobal: true,
-                          followerAnchor: Alignment.center,
+                          followerAnchor: Alignment.topLeft,
                           targetAnchor: Alignment.bottomLeft,
                           barrierColor: Colors.transparent);
                     },
-                    child: Text("Tap to show a local alert dialog"));
-              }),
-              Builder(builder: (context) {
-                return ElevatedButton(
-                    onPressed: () {
-                      showAlignedDialog(
-                          context: context,
-                          builder: _globalDialogBuilder,
-                          followerAnchor: Alignment.topLeft,
-                          isGlobal: true,
-                          transitionsBuilder: (BuildContext context,
-                              Animation<double> animation,
-                              Animation<double> secondaryAnimation,
-                              Widget child) {
-                            return SlideTransition(
-                              position:
-                                  Tween(begin: Offset(-1, 0), end: Offset(0, 0))
-                                      .animate(animation),
-                              child: FadeTransition(
-                                opacity: CurvedAnimation(
-                                  parent: animation,
-                                  curve: Curves.easeOut,
-                                ),
-                                child: child,
-                              ),
-                            );
-                          });
-                    },
-                    child: Text("Tap to show a left drawer"));
-              }),
-              Builder(builder: (context) {
-                return ElevatedButton(
-                    onPressed: () {
-                      showAlignedDialog(
-                          context: context,
-                          builder: _globalDialogBuilder,
-                          followerAnchor: Alignment.topRight,
-                          isGlobal: true,
-                          transitionsBuilder: (BuildContext context,
-                              Animation<double> animation,
-                              Animation<double> secondaryAnimation,
-                              Widget child) {
-                            return SlideTransition(
-                              position:
-                                  Tween(begin: Offset(1, 0), end: Offset(0, 0))
-                                      .animate(animation),
-                              child: FadeTransition(
-                                opacity: CurvedAnimation(
-                                  parent: animation,
-                                  curve: Curves.easeOut,
-                                ),
-                                child: child,
-                              ),
-                            );
-                          });
-                    },
-                    child: Text("Tap to show a right drawer"));
-              })
-            ]
-              ..add(Container(
-                height: 100,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: List.generate(
-                    10,
-                    (index) => Builder(builder: (context) {
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: ElevatedButton(
-                            onPressed: () {
-                              showAlignedDialog(
-                                  context: context,
-                                  builder: _localDialogBuilder,
-                                  followerAnchor: Alignment.topLeft,
-                                  targetAnchor: Alignment.bottomLeft,
-                                  barrierColor: Colors.transparent,
-                                  offset: Offset(10, 10),
-                                  avoidOverflow: true);
+                    child: Container(
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                              fit: BoxFit.cover,
+                              image: NetworkImage(
+                                  "https://images.unsplash.com/photo-1612392062422-ef19b42f74df?ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2550&q=80"))),
+                      alignment: Alignment.centerLeft,
+                      width: 150,
+                      height: 200,
+                    ),
+                  );
+                }),
+                SizedBox(
+                  height: 20,
+                ),
+                Builder(builder: (context) {
+                  return ElevatedButton(
+                      onPressed: () {
+                        showAlignedDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                insetPadding: EdgeInsets.zero,
+                                title: Text("Alert!"),
+                                content: Text("Its an alert"),
+                              );
                             },
-                            child: Text("Tap to show a local dialog")),
-                      );
-                    }),
+                            isGlobal: true,
+                            followerAnchor: Alignment.center,
+                            targetAnchor: Alignment.bottomLeft,
+                            barrierColor: Colors.transparent);
+                      },
+                      child: Text("Tap to show a local alert dialog"));
+                }),
+                SizedBox(
+                  height: 20,
+                ),
+                Builder(builder: (context) {
+                  return ElevatedButton(
+                      onPressed: () {
+                        showAlignedDialog(
+                            context: context,
+                            builder: _horizontalDrawerBuilder,
+                            followerAnchor: Alignment.topLeft,
+                            isGlobal: true,
+                            transitionsBuilder: (BuildContext context,
+                                Animation<double> animation,
+                                Animation<double> secondaryAnimation,
+                                Widget child) {
+                              return SlideTransition(
+                                position: Tween(
+                                        begin: Offset(-1, 0), end: Offset(0, 0))
+                                    .animate(animation),
+                                child: FadeTransition(
+                                  opacity: CurvedAnimation(
+                                    parent: animation,
+                                    curve: Curves.easeOut,
+                                  ),
+                                  child: child,
+                                ),
+                              );
+                            });
+                      },
+                      child: Text("Tap to show a left drawer"));
+                }),
+                SizedBox(
+                  height: 20,
+                ),
+                Builder(builder: (context) {
+                  return ElevatedButton(
+                      onPressed: () {
+                        showAlignedDialog(
+                            context: context,
+                            builder: _horizontalDrawerBuilder,
+                            followerAnchor: Alignment.topRight,
+                            isGlobal: true,
+                            transitionsBuilder: (BuildContext context,
+                                Animation<double> animation,
+                                Animation<double> secondaryAnimation,
+                                Widget child) {
+                              return SlideTransition(
+                                position: Tween(
+                                        begin: Offset(1, 0), end: Offset(0, 0))
+                                    .animate(animation),
+                                child: FadeTransition(
+                                  opacity: CurvedAnimation(
+                                    parent: animation,
+                                    curve: Curves.easeOut,
+                                  ),
+                                  child: child,
+                                ),
+                              );
+                            });
+                      },
+                      child: Text("Tap to show a right drawer"));
+                }),
+                SizedBox(
+                  height: 20,
+                ),
+                Builder(builder: (context) {
+                  return ElevatedButton(
+                      onPressed: () {
+                        showAlignedDialog(
+                            context: context,
+                            builder: _verticalDrawerBuilder,
+                            followerAnchor: Alignment.topLeft,
+                            isGlobal: true,
+                            transitionsBuilder: (BuildContext context,
+                                Animation<double> animation,
+                                Animation<double> secondaryAnimation,
+                                Widget child) {
+                              return SlideTransition(
+                                position: Tween(
+                                        begin: Offset(0, -1), end: Offset(0, 0))
+                                    .animate(animation),
+                                child: FadeTransition(
+                                  opacity: CurvedAnimation(
+                                    parent: animation,
+                                    curve: Curves.easeOut,
+                                  ),
+                                  child: child,
+                                ),
+                              );
+                            });
+                      },
+                      child: Text("Tap to show a top drawer"));
+                }),
+                SizedBox(
+                  height: 20,
+                ),
+                Builder(builder: (context) {
+                  return ElevatedButton(
+                      onPressed: () {
+                        showAlignedDialog(
+                            context: context,
+                            builder: _verticalDrawerBuilder,
+                            followerAnchor: Alignment.bottomLeft,
+                            isGlobal: true,
+                            transitionsBuilder: (BuildContext context,
+                                Animation<double> animation,
+                                Animation<double> secondaryAnimation,
+                                Widget child) {
+                              return SlideTransition(
+                                position: Tween(
+                                        begin: Offset(0, 1), end: Offset(0, 0))
+                                    .animate(animation),
+                                child: FadeTransition(
+                                  opacity: CurvedAnimation(
+                                    parent: animation,
+                                    curve: Curves.easeOut,
+                                  ),
+                                  child: child,
+                                ),
+                              );
+                            });
+                      },
+                      child: Text("Tap to show a bottom drawer"));
+                }),
+                SizedBox(
+                  height: 20,
+                ),
+              ]
+                ..add(Container(
+                  height: 100,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: List.generate(
+                      10,
+                      (index) => Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Builder(builder: (context) {
+                            return ElevatedButton(
+                                onPressed: () {
+                                  showAlignedDialog(
+                                      context: context,
+                                      builder: _localDialogBuilder,
+                                      followerAnchor: Alignment.topLeft,
+                                      targetAnchor: Alignment.bottomLeft,
+                                      barrierColor: Colors.transparent,
+                                      //offset: Offset(10, 10),
+                                      avoidOverflow: true);
+                                },
+                                child: Text("Tap to show a local dialog"));
+                          })),
+                    ),
+                  ),
+                ))
+                ..addAll(
+                  List.generate(
+                    5,
+                    (index) => Container(
+                        alignment: Alignment.center,
+                        padding: const EdgeInsets.all(8.0),
+                        child: Builder(builder: (context) {
+                          var rng = new Random();
+                          return ElevatedButton(
+                              onPressed: () {
+                                showAlignedDialog(
+                                    context: context,
+                                    builder: _localDialogBuilder,
+                                    followerAnchor: Alignment.topLeft,
+                                    targetAnchor: Alignment.bottomRight,
+                                    barrierColor: Colors.transparent,
+                                    avoidOverflow: true);
+                              },
+                              child: Container(
+                                  alignment: Alignment.center,
+                                  width: rng.nextInt(300) + 300,
+                                  height: rng.nextInt(50) + 50,
+                                  child: Text(
+                                      "Tap to show a local dialog at bottom right")));
+                        })),
+                  ),
+                )
+                ..addAll(
+                  List.generate(
+                    15,
+                    (index) => Container(
+                        alignment: Alignment.center,
+                        margin: EdgeInsets.all(8),
+                        child: Builder(builder: (context) {
+                          var rng = new Random();
+                          return ElevatedButton(
+                              onPressed: () {
+                                showAlignedDialog(
+                                    context: context,
+                                    builder: _localDialogBuilder,
+                                    followerAnchor: Alignment.bottomRight,
+                                    targetAnchor: Alignment.topLeft,
+                                    barrierColor: Colors.transparent,
+                                    avoidOverflow: true);
+                              },
+                              child: Container(
+                                  margin: EdgeInsets.all(
+                                      rng.nextInt(100).toDouble()),
+                                  alignment: Alignment.center,
+                                  width: rng.nextInt(300) + 300,
+                                  height: rng.nextInt(80) + 20,
+                                  child: Text(
+                                      "Tap to show a local dialog at top left")));
+                        })),
                   ),
                 ),
-              ))
-              ..addAll(
-                List.generate(
-                  10,
-                  (index) => Container(
-                      alignment: Alignment.center,
-                      padding: const EdgeInsets.all(8.0),
-                      child: Builder(builder: (context) {
-                        var rng = new Random();
-                        return ElevatedButton(
-                            onPressed: () {
-                              showAlignedDialog(
-                                  context: context,
-                                  builder: _localDialogBuilder,
-                                  followerAnchor: Alignment.topLeft,
-                                  targetAnchor: Alignment.bottomRight,
-                                  barrierColor: Colors.transparent,
-                                  avoidOverflow: true);
-                            },
-                            child: Container(
-                                alignment: Alignment.center,
-                                width: rng.nextInt(300) + 300,
-                                height: rng.nextInt(50) + 50,
-                                child: Text("Tap to show a local dialog")));
-                      })),
-                ),
-              ),
+            ),
           ),
         ),
       ), // This trailing comma makes auto-formatting nicer for build methods.
@@ -241,7 +423,7 @@ class _MyHomePageState extends State<MyHomePage> {
     };
   }
 
-  WidgetBuilder get _globalDialogBuilder {
+  WidgetBuilder get _horizontalDrawerBuilder {
     return (BuildContext context) {
       return GestureDetector(
         onTap: () {
@@ -298,6 +480,70 @@ class _MyHomePageState extends State<MyHomePage> {
                     Text("Some Text"),
                   ],
                 ),
+              ),
+            ),
+          ),
+        ),
+      );
+    };
+  }
+
+  WidgetBuilder get _verticalDrawerBuilder {
+    return (BuildContext context) {
+      return GestureDetector(
+        onTap: () {
+          Navigator.of(context).pop();
+        },
+        child: Container(
+          height: 300,
+          padding: EdgeInsets.symmetric(horizontal: 10),
+          decoration: BoxDecoration(
+            color: Colors.amberAccent,
+          ),
+          alignment: Alignment.center,
+          child: DefaultTextStyle(
+            style: TextStyle(fontSize: 18, color: Colors.black87),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  SizedBox(
+                    height: 10,
+                  ),
+                  GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text("Tap to close")),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Divider(
+                    height: 4,
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  GestureDetector(
+                      onTap: () {
+                        print("hello2");
+                        //Navigator.of(context).pop();
+                      },
+                      child: Text("Tap to print")),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text("Some Text"),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text("Some Text"),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text("Some Text"),
+                ],
               ),
             ),
           ),
