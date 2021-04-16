@@ -1,5 +1,16 @@
 import 'package:flutter/material.dart';
 
+///show a dialog that is aligned to the widget(context) that opens it.
+///The followerAnchor and targetAnchor tells how the dialog and the original widget should be aligned, similar to the CompositedTransformFollower widget.
+///
+///The offset is for additional fine control over how the dialog is positioned.
+///
+///avoidOverflow will shift the dialog as possible as it can to avoid painting the dialog outside of the screen, if set to true.
+///
+///isGlobal, if set to true, will align the dialog relative to the whole screen, rendering the targetAnchor parameter irrelevant.
+///
+///transitionsBuilder, tells how the dialog shows up and dismisses. The default behavior is a fade transtion, but you can add more animations like sliding easily. duration specifies how long this transtion takes.
+
 Future<T?> showAlignedDialog<T>({
   required BuildContext context,
   required WidgetBuilder builder,

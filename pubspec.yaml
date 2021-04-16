@@ -1,6 +1,6 @@
 name: aligned_dialog
 description: Show a locally/globally aligned dialog with custom transtion animation.
-version: 0.0.2
+version: 0.0.3
 homepage: https://github.com/KevinVan720/aligned_dialog.git
 
 environment:

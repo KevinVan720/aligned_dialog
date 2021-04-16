@@ -161,28 +161,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 Builder(builder: (context) {
                   return ElevatedButton(
                       onPressed: () {
-                        showAlignedDialog(
+                        showAlignedDrawer(
                             context: context,
                             builder: _horizontalDrawerBuilder,
-                            followerAnchor: Alignment.topLeft,
-                            isGlobal: true,
-                            transitionsBuilder: (BuildContext context,
-                                Animation<double> animation,
-                                Animation<double> secondaryAnimation,
-                                Widget child) {
-                              return SlideTransition(
-                                position: Tween(
-                                        begin: Offset(-1, 0), end: Offset(0, 0))
-                                    .animate(animation),
-                                child: FadeTransition(
-                                  opacity: CurvedAnimation(
-                                    parent: animation,
-                                    curve: Curves.easeOut,
-                                  ),
-                                  child: child,
-                                ),
-                              );
-                            });
+                            direction: AxisDirection.left);
                       },
                       child: Text("Tap to show a left drawer"));
                 }),
@@ -192,28 +174,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 Builder(builder: (context) {
                   return ElevatedButton(
                       onPressed: () {
-                        showAlignedDialog(
+                        showAlignedDrawer(
                             context: context,
                             builder: _horizontalDrawerBuilder,
-                            followerAnchor: Alignment.topRight,
-                            isGlobal: true,
-                            transitionsBuilder: (BuildContext context,
-                                Animation<double> animation,
-                                Animation<double> secondaryAnimation,
-                                Widget child) {
-                              return SlideTransition(
-                                position: Tween(
-                                        begin: Offset(1, 0), end: Offset(0, 0))
-                                    .animate(animation),
-                                child: FadeTransition(
-                                  opacity: CurvedAnimation(
-                                    parent: animation,
-                                    curve: Curves.easeOut,
-                                  ),
-                                  child: child,
-                                ),
-                              );
-                            });
+                            direction: AxisDirection.right);
                       },
                       child: Text("Tap to show a right drawer"));
                 }),
@@ -223,28 +187,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 Builder(builder: (context) {
                   return ElevatedButton(
                       onPressed: () {
-                        showAlignedDialog(
+                        showAlignedDrawer(
                             context: context,
                             builder: _verticalDrawerBuilder,
-                            followerAnchor: Alignment.topLeft,
-                            isGlobal: true,
-                            transitionsBuilder: (BuildContext context,
-                                Animation<double> animation,
-                                Animation<double> secondaryAnimation,
-                                Widget child) {
-                              return SlideTransition(
-                                position: Tween(
-                                        begin: Offset(0, -1), end: Offset(0, 0))
-                                    .animate(animation),
-                                child: FadeTransition(
-                                  opacity: CurvedAnimation(
-                                    parent: animation,
-                                    curve: Curves.easeOut,
-                                  ),
-                                  child: child,
-                                ),
-                              );
-                            });
+                            direction: AxisDirection.up);
                       },
                       child: Text("Tap to show a top drawer"));
                 }),
@@ -254,28 +200,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 Builder(builder: (context) {
                   return ElevatedButton(
                       onPressed: () {
-                        showAlignedDialog(
+                        showAlignedDrawer(
                             context: context,
                             builder: _verticalDrawerBuilder,
-                            followerAnchor: Alignment.bottomLeft,
-                            isGlobal: true,
-                            transitionsBuilder: (BuildContext context,
-                                Animation<double> animation,
-                                Animation<double> secondaryAnimation,
-                                Widget child) {
-                              return SlideTransition(
-                                position: Tween(
-                                        begin: Offset(0, 1), end: Offset(0, 0))
-                                    .animate(animation),
-                                child: FadeTransition(
-                                  opacity: CurvedAnimation(
-                                    parent: animation,
-                                    curve: Curves.easeOut,
-                                  ),
-                                  child: child,
-                                ),
-                              );
-                            });
+                            direction: AxisDirection.down);
                       },
                       child: Text("Tap to show a bottom drawer"));
                 }),
