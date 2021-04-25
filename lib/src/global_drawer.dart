@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 ///show a dialog/drawer that is aligned to one of the edges of the screen, specified by the direction.
 
-Future<T?> showAlignedDrawer<T>({
+Future<T?> showGlobalDrawer<T>({
   required BuildContext context,
   required WidgetBuilder builder,
   bool barrierDismissible = true,

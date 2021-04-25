@@ -161,7 +161,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 Builder(builder: (context) {
                   return ElevatedButton(
                       onPressed: () {
-                        showAlignedDrawer(
+                        showGlobalDrawer(
                             context: context,
                             builder: _horizontalDrawerBuilder,
                             direction: AxisDirection.left);
@@ -174,7 +174,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 Builder(builder: (context) {
                   return ElevatedButton(
                       onPressed: () {
-                        showAlignedDrawer(
+                        showGlobalDrawer(
                             context: context,
                             builder: _horizontalDrawerBuilder,
                             direction: AxisDirection.right);
@@ -187,7 +187,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 Builder(builder: (context) {
                   return ElevatedButton(
                       onPressed: () {
-                        showAlignedDrawer(
+                        showGlobalDrawer(
                             context: context,
                             builder: _verticalDrawerBuilder,
                             direction: AxisDirection.up);
@@ -200,7 +200,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 Builder(builder: (context) {
                   return ElevatedButton(
                       onPressed: () {
-                        showAlignedDrawer(
+                        showGlobalDrawer(
                             context: context,
                             builder: _verticalDrawerBuilder,
                             direction: AxisDirection.down);

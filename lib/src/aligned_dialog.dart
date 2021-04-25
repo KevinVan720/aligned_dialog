@@ -60,7 +60,7 @@ Future<T?> showAlignedDialog<T>({
     barrierColor: barrierColor,
     barrierDismissible: barrierDismissible,
     barrierLabel: barrierLabel,
-    useSafeArea: isGlobal,
+    useSafeArea: isGlobal == true,
     settings: routeSettings,
     themes: themes,
     transitionsBuilder: transitionsBuilder,
