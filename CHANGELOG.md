@@ -17,3 +17,9 @@ Global drawer
 ## 0.0.5
 
 Update dependence
+
+## 0.0.6
+
+Update license
+
+
