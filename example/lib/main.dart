@@ -1,8 +1,6 @@
 import 'dart:math';
 
 import 'package:aligned_dialog/aligned_dialog.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
