@@ -1,6 +1,6 @@
 # aligned_dialog
 
-A Flutter package that allows you to open a dialog aligned with it's associating widget.
+A Flutter package that allows you to open a dialog aligned with its associated widget.
 
 ## Getting Started
 
@@ -27,15 +27,51 @@ Future<T?> showAlignedDialog<T>({
 })
 ```
 
-The last seven parameters are whats different from the built-in showDialog function. The **followerAnchor** and **targetAnchor** tells how the dialog and the original widget should be aligned, similar to the CompositedTransformFollower widget. The **offset** is for additional fine control over how the dialog is positioned.
+The last seven parameters are what's different from the built-in showDialog function. The **followerAnchor** and **targetAnchor** tell how the dialog and the original widget should be aligned, similar to the CompositedTransformFollower widget: the followerAnchor point of the dialog is placed on the targetAnchor point of the widget. The **offset** is for additional fine control over how the dialog is positioned.
 
-**avoidOverflow** will shift the dialog as possible as it can to avoid painting the dialog outside of the screen, if set to true.
+**avoidOverflow** will shift the dialog as little as possible to avoid painting the dialog outside of the screen, if set to true.
 
-**isGlobal**, if set to true, will align the dialog relative to the whole screen, rendering the targetAnchor parameter irrelevant.
+**isGlobal**, if set to true, will align the dialog relative to the whole screen (inside its safe area), rendering the targetAnchor parameter irrelevant.
 
-**transitionsBuilder**, tells how the dialog shows up and dismisses. The default behavior is a fade transtion, but you can add more animations like sliding easily. **duration** specifies how long this transtion takes.
+**transitionsBuilder** tells how the dialog shows up and dismisses. The default behavior is a fade transition, but you can add more animations like sliding easily. **duration** specifies how long this transition takes.
 
-You can find examples in the example folder.
+The dialog is aligned to the widget of the `context` that you pass, so use the context of the widget that opens the dialog, for example with a `Builder`:
+
+```dart
+Builder(
+  builder: (BuildContext context) {
+    return ElevatedButton(
+      onPressed: () async {
+        final String? result = await showAlignedDialog<String>(
+          context: context,
+          builder: (BuildContext context) => TextButton(
+            onPressed: () => Navigator.of(context).pop('Hello'),
+            child: const Text('Close'),
+          ),
+          // Open the dialog right below the button, left edges aligned.
+          followerAnchor: Alignment.topLeft,
+          targetAnchor: Alignment.bottomLeft,
+          avoidOverflow: true,
+        );
+        debugPrint('Dialog closed with $result');
+      },
+      child: const Text('Show dialog'),
+    );
+  },
+)
+```
+
+To show a drawer that slides in from one of the edges of the screen, use `showGlobalDrawer`:
+
+```dart
+showGlobalDrawer(
+  context: context,
+  builder: (BuildContext context) => const Drawer(child: Text('Drawer')),
+  direction: AxisDirection.right,
+);
+```
+
+You can find more examples in the example folder.
 
 ![example1](https://i.imgur.com/y7OFoJ8.gif)
 

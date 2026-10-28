@@ -1,30 +1,77 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility that Flutter provides. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
+import 'package:example/main.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:example/main.dart';
+/// Runs [body] while ignoring the errors of [NetworkImage]s: the example shows
+/// images from the network, which is not available in widget tests.
+Future<void> ignoringNetworkImageErrors(Future<void> Function() body) async {
+  final FlutterExceptionHandler? onError = FlutterError.onError;
+  FlutterError.onError = (FlutterErrorDetails details) {
+    if (details.exception is NetworkImageLoadException) {
+      return;
+    }
+    onError?.call(details);
+  };
+  try {
+    await body();
+  } finally {
+    FlutterError.onError = onError;
+  }
+}
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(MyApp());
+  testWidgets('opens and closes an aligned dialog', (
+    WidgetTester tester,
+  ) async {
+    tester.view.physicalSize = const Size(1200, 1600);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    await ignoringNetworkImageErrors(() async {
+      await tester.pumpWidget(const MyApp());
+      expect(find.text('Flutter Demo Home Page'), findsOneWidget);
+      expect(find.text('Tap to close'), findsNothing);
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+      final Finder button = find.text('Tap to show a local dialog').first;
+      await tester.tap(button);
+      await tester.pumpAndSettle();
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+      // The dialog opens right below the button, left edges aligned.
+      final Finder close = find.text('Tap to close');
+      expect(close, findsOneWidget);
+      final Rect buttonRect = tester.getRect(
+        find.ancestor(of: button, matching: find.byType(ElevatedButton)),
+      );
+      final Rect dialogRect = tester.getRect(
+        find.ancestor(of: close, matching: find.byType(IntrinsicWidth)),
+      );
+      expect(dialogRect.top, buttonRect.bottom);
+      expect(dialogRect.left, greaterThanOrEqualTo(buttonRect.left));
+
+      await tester.tap(close);
+      await tester.pumpAndSettle();
+      expect(find.text('Tap to close'), findsNothing);
+    });
+  });
+
+  testWidgets('opens and closes a drawer', (WidgetTester tester) async {
+    tester.view.physicalSize = const Size(1200, 1600);
+    tester.view.devicePixelRatio = 1.0;
+    addTearDown(tester.view.reset);
+
+    await ignoringNetworkImageErrors(() async {
+      await tester.pumpWidget(const MyApp());
+
+      await tester.tap(find.text('Tap to show a right drawer'));
+      await tester.pumpAndSettle();
+      expect(find.byType(Drawer), findsOneWidget);
+      expect(tester.getRect(find.byType(Drawer)).right, 1200);
+
+      // Tapping the barrier closes the drawer.
+      await tester.tapAt(const Offset(10, 800));
+      await tester.pumpAndSettle();
+      expect(find.byType(Drawer), findsNothing);
+    });
   });
 }
